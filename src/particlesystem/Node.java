@@ -1,5 +1,5 @@
 
-package particlesystem_v7;
+package particlesystem;
 
 public class Node {
   
