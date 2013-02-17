@@ -12,11 +12,10 @@ import particlesystem_v5.ParticleSystem_v5;
 
 public class SimpleGUI extends JFrame{
 	
-	static JTextField particlenumberTF, tileTF;
-	static 
+	static JTextField particlenumberTF, particlesizeTF, tileTF;
 	
 	private JButton runB;
-	private JLabel particlenumberL, tileL;
+	private JLabel particlenumberL, particlesizeL, tileL;
 	
 	private String[] selectionTitles = {"v5","v7"};
 	private JComboBox<String> versionList = new JComboBox<String>(selectionTitles);
@@ -47,7 +46,11 @@ public class SimpleGUI extends JFrame{
 	    
 	    particlenumberL = new JLabel ("Number of Particles?");	    
 	    particlenumberTF = new JTextField();
-	    particlenumberTF.setText("50000");
+	    particlenumberTF.setText("500000");
+	    
+	    particlesizeL = new JLabel ("Particle Size?");	    
+	    particlesizeTF = new JTextField();
+	    particlesizeTF.setText("1");
 	    
 	    
 	    tileL = new JLabel ("Number of Tiles?");    
@@ -66,10 +69,12 @@ public class SimpleGUI extends JFrame{
 
 		
 		Container pane = this.getContentPane();
-		pane.setLayout(new GridLayout(3,2));
+		pane.setLayout(new GridLayout(4,2));
 		
 		pane.add(particlenumberL);
 		pane.add(particlenumberTF);
+		pane.add(particlesizeL);
+		pane.add(particlesizeTF);
 		pane.add(tileL);
 		pane.add(tileTF);
 		pane.add(versionList);

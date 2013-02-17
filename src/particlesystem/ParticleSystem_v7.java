@@ -12,7 +12,7 @@ public class ParticleSystem_v7 extends Canvas {
 	public static final int HEIGHT = 1200;
 	public static final int TICK = 16;
 
-	public static boolean paused = false;
+	public boolean paused, quit = false;
 
 	{
 
@@ -33,18 +33,23 @@ public class ParticleSystem_v7 extends Canvas {
 				while (true) {
 					long time = System.currentTimeMillis();
 
-					if( !ren.getPaused() && paused){
-						frame.setOpacity(1f);
-					}
-
 					paused = ren.getPaused();
 
 					if( !paused ){
 						//ren.tick();
+						frame.setOpacity(1f);
 						ren.repaint();
 					} else {
 						frame.setOpacity(.5f);
 					}
+
+
+					quit = ren.getQuit();
+					
+					if( quit ){
+						frame.dispose();
+					}
+
 
 					long endtime = System.currentTimeMillis();
 					try {

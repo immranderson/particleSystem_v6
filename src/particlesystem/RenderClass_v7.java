@@ -24,8 +24,8 @@ import java.util.Random;
 
 public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotionListener, KeyListener{
 
-	private static final int TILE_SIZE = Integer.parseInt(SimpleGUI.tileTF.getText());
-	private static final int PARTICLE_SIZE = 4;
+	private static int TILE_SIZE;
+	private static int PARTICLE_SIZE;
 	private static int WIDTH;
 	private static int HEIGHT;
 	private static int TILE_COUNT_X;
@@ -36,7 +36,7 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 	private float[][] yAccelGrid;
 	private float[][] xAccelGrid;
 
-	private boolean paused = false;
+	private boolean paused, quit = false;
 
 	private BufferedImage particleImage;
 	private int[] particleRaster;
@@ -52,6 +52,9 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 	ArrayList<Particle> particleAL = new ArrayList<Particle>();
 
 	public RenderClass_v7(int width, int height) {
+		
+		TILE_SIZE = Integer.parseInt(SimpleGUI.tileTF.getText());
+		PARTICLE_SIZE = Integer.parseInt(SimpleGUI.particlesizeTF.getText());
 
 		WIDTH = width;
 		HEIGHT = height;
@@ -307,16 +310,23 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 		return x * Float.intBitsToFloat(0x5f3759d5 - (Float.floatToIntBits(x) >> 1));
 	}
 
+
 	public void paint(Graphics g) {
 
+		//CLEAR
 		tick();
 
+		
+		//SET BACKGROUND TILE COLOR
 		for(int xi = 0; xi < TILE_COUNT_X; xi++){
 			for(int yi = 0; yi < TILE_COUNT_Y; yi++){
 				if(traversable[xi][yi]){
 
-					int blue = ((int)(distance[xi][yi]*6) % 512) < 256 ? (int)(distance[xi][yi]*6) % 256 : 255 - ((int)(distance[xi][yi]*6) % 256);
-
+					//Intensity of blue depends on distance of tile from mouse
+					
+					//int blue = ((int)(distance[xi][yi]*6) % 512) < 256 ? (int)(distance[xi][yi]*6) % 256 : 255 - ((int)(distance[xi][yi]*6) % 256);
+					int blue = 0;
+					
 					// gradient distance
 					g.setColor( new Color( 0, 0, blue ) );
 
@@ -335,7 +345,7 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 
 
 		//SET GRADIENT
-		int[] gradient = Particle.SAND_GRAD;
+		int[] gradient = Particle.EXP_GRAD;
 
 
 		// iterate throught densityArray and put into particleRaster
@@ -358,6 +368,10 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 
 	public boolean getPaused(){
 		return paused;
+	}
+	
+	public boolean getQuit() {
+		return quit;
 	}
 
 	@Override
@@ -389,12 +403,28 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 
 	@Override
 	public void keyTyped(KeyEvent ke) {
-		if( ke.getKeyChar() == 27 /*VK_ESCAPE*/ ){
+		
+		switch (ke.getKeyChar())
+		{
+		case KeyEvent.VK_SPACE:
 			paused = !paused;
-		}
-		else if (ke.getKeyChar() == 81 /*VK_Q*/){ //Want to make an easy quit key
+			break;
+			
+		case KeyEvent.VK_ESCAPE:
+			quit = !quit;
+			break;
 			
 		}
+		
+//		if( ke.getKeyChar() == KeyEvent.VK_ESCAPE ){
+//			paused = !paused;
+//		}
+		
+//		if (ke.getKeyChar() ==  KeyEvent.VK_END){ //Want to make an easy quit key
+//			
+//			System.out.println("End Registered");
+//			quit = !quit;
+//		}
 
 	}
 
