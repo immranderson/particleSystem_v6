@@ -1,10 +1,11 @@
 // sdurant12
 // 11/14/2012
 
-package particlesystem_v5;
+package particlesystem;
 
 import java.awt.Canvas;
 import javax.swing.*;
+
 
 
 

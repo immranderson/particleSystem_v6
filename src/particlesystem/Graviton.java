@@ -1,7 +1,7 @@
 // sdurant12
 // 11/14/2012
 
-package particlesystem_v5;
+package particlesystem;
 
 public class Graviton {
     

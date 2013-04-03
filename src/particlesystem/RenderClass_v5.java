@@ -1,12 +1,10 @@
 // sdurant12
 // 11/14/2012
 
-package particlesystem_v5;
+package particlesystem;
 
 import javax.swing.*;
 
-import particlesystem_v5.Block;
-import particlesystem_v5.Graviton;
 
 import java.awt.*;
 import java.awt.event.*;

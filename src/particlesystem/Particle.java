@@ -5,6 +5,8 @@ public class Particle {
 
 	private float xPos, yPos, xVel, yVel;
 	private int size;
+    private float pxVel, pyVel;
+    private int age = 0;
 	private int[] gradient;
 	
 	//seems to be {screen_foreground, particle trail, particle trail, ... , particle center }
@@ -72,9 +74,43 @@ public class Particle {
 	public float getyVel(){
 		return yVel;
 	}
+	
+    public float getpxVel(){
+        return pxVel;
+      }
+      public float getpyVel(){
+        return pyVel;
+      }
+      public int getAge(){
+        return age;
+      }
 
 	public int[] getGradient(){
 		return gradient;
 	}
+	
+    public void setxPos(float xp){
+        this.xPos = xp;
+      }
+      public void setyPos(float yp){
+        this.yPos = yp;
+      }
+      public void setxVel(float xv){
+        this.xVel = xv;
+      }
+      public void setyVel(float yv){
+        this.yVel = yv;
+      }
+      public void setpxVel(float pxv){
+        this.pxVel = pxv;
+      }
+      public void setpyVel(float pyv){
+        this.pyVel = pyv;
+      }
+      public void setAge(int a){
+        this.age = a;
+      }
+	
+
 }
 

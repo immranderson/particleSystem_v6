@@ -8,8 +8,8 @@ import javax.swing.*;
 
 public class ParticleSystem_v7 extends Canvas {
 
-	public static final int WIDTH = 1920;
-	public static final int HEIGHT = 1200;
+	public static final int WIDTH = 1280;
+	public static final int HEIGHT = 720;
 	public static final int TICK = 16;
 
 	public boolean paused, quit = false;
@@ -19,7 +19,7 @@ public class ParticleSystem_v7 extends Canvas {
 		final JFrame frame = new JFrame("");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(WIDTH, HEIGHT);
-		frame.setUndecorated(true);
+		frame.setUndecorated(false);
 		frame.setResizable(false);
 		frame.setFocusable(true);
 
@@ -37,10 +37,10 @@ public class ParticleSystem_v7 extends Canvas {
 
 					if( !paused ){
 						//ren.tick();
-						frame.setOpacity(1f);
+						//frame.setOpacity(1f);
 						ren.repaint();
 					} else {
-						frame.setOpacity(.5f);
+						//frame.setOpacity(.5f);
 					}
 
 

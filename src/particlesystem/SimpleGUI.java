@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import particlesystem_v5.ParticleSystem_v5;
 
 
 public class SimpleGUI extends JFrame{
