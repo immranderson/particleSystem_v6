@@ -10,7 +10,7 @@ public class ParticleSystem_v7 extends Canvas {
 
 	public static final int WIDTH = 1280;
 	public static final int HEIGHT = 720;
-	public static final int TICK = 16;
+	//public static final int TICK = 16;
 
 	public boolean paused, quit = false;
 
@@ -23,8 +23,8 @@ public class ParticleSystem_v7 extends Canvas {
 		frame.setResizable(false);
 		frame.setFocusable(true);
 
-		final RenderClass_v7 ren = new RenderClass_v7(WIDTH, HEIGHT);
-		frame.add(ren);
+		final RenderClass_v7 ren7 = new RenderClass_v7(WIDTH, HEIGHT);
+		frame.add(ren7);
 
 		frame.setVisible(true);
 
@@ -33,19 +33,19 @@ public class ParticleSystem_v7 extends Canvas {
 				while (true) {
 					long time = System.currentTimeMillis();
 
-					paused = ren.getPaused();
+					paused = ren7.getPaused();
 
 					if( !paused ){
 						//ren.tick();
 						//frame.setOpacity(1f);
-						ren.repaint();
+						ren7.repaint();
 					} else {
 						//frame.setOpacity(.5f);
 					}
 
 
-					quit = ren.getQuit();
-					
+					quit = ren7.getQuit();
+
 					if( quit ){
 						frame.dispose();
 					}
@@ -53,7 +53,7 @@ public class ParticleSystem_v7 extends Canvas {
 
 					long endtime = System.currentTimeMillis();
 					try {
-						Thread.sleep( - (endtime - time));
+						Thread.sleep(time - endtime);
 					} catch (Exception e) {
 						// System.out.println("cannot sleep");
 					}

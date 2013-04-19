@@ -52,7 +52,7 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 	ArrayList<Particle> particleAL = new ArrayList<Particle>();
 
 	public RenderClass_v7(int width, int height) {
-		
+
 		TILE_SIZE = Integer.parseInt(SimpleGUI.tileTF.getText());
 		PARTICLE_SIZE = Integer.parseInt(SimpleGUI.particlesizeTF.getText());
 
@@ -68,7 +68,7 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 		particleImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		particleRaster = ((DataBufferInt) particleImage.getRaster().getDataBuffer()).getData();
 
-		densityArray = new int[WIDTH][HEIGHT];
+		densityArray = new int[WIDTH][HEIGHT]; //controls displayed colors
 
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -79,18 +79,29 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 
 	public void init() {
 
-		for(int xi = 0; xi < TILE_COUNT_X; xi++){
-			for(int yi = 0; yi < TILE_COUNT_Y; yi++){
-				traversable[xi][yi] = true;
-				if( (xi == TILE_COUNT_X/3 || xi == TILE_COUNT_X*2/3 || xi == TILE_COUNT_X/2 ) && yi != TILE_COUNT_Y/3 /*&& yi != TILE_COUNT_Y*2/3*/ ){
+		//Initialize Render World
+		for(int xi = 0; xi < TILE_COUNT_X; xi++)
+		{
+			for(int yi = 0; yi < TILE_COUNT_Y; yi++)
+			{
+				traversable[xi][yi] = true; //sets all tiles to traversable
+				
+				//Start adding random non-traversable blocks
+				
+				if( (xi == TILE_COUNT_X/3 || xi == TILE_COUNT_X*2/3 || xi == TILE_COUNT_X/2 ) && yi != TILE_COUNT_Y/3 /*&& yi != TILE_COUNT_Y*2/3*/ )
+				{
 					traversable[xi][yi] = false;
 				}
-				if(r.nextFloat() < .1f && yi != TILE_COUNT_Y/3){
+				if(r.nextFloat() < .1f && yi != TILE_COUNT_Y/3)
+				{
 					traversable[xi][yi] = false;
 				}
-				if(xi < 9 && yi < 5){
+				if(xi < 9 && yi < 5)
+				{
 					traversable[xi][yi] = true;
 				}
+				
+				//End non-traversable blocks
 
 			}
 		}
@@ -103,8 +114,9 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 			float x = 100 + .5f*r.nextFloat()*TILE_SIZE*TILE_COUNT_X;
 			float y = 100 + .5f*r.nextFloat()*TILE_SIZE*TILE_COUNT_Y;
 
-			if(traversable[(int)(x/TILE_SIZE)][(int)(y/TILE_SIZE)]){
-				particleAL.add( new Particle( x, y , r.nextFloat()*10, r.nextFloat()*10 ));
+			if(traversable[(int)(x/TILE_SIZE)][(int)(y/TILE_SIZE)])
+			{
+				particleAL.add( new Particle( Particle.WATER_GRAD, x, y , r.nextFloat()*10, r.nextFloat()*10 ));
 			}
 		}
 
@@ -212,12 +224,14 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 
 	}
 
-	public void tick() {
+	public void tick() 
+	{
 
 		for(int xi = 0; xi < WIDTH; xi++){
 			for(int yi = 0; yi < HEIGHT; yi++){
 
-				densityArray[xi][yi] = 0;//densityArray[xi][yi]/2;
+				densityArray[xi][yi] = 0;
+				//densityArray[xi][yi] = densityArray[xi][yi]/2;
 
 			}
 		}
@@ -311,22 +325,24 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 	}
 
 
-	public void paint(Graphics g) {
-
+	public void paint(Graphics g) 
+	
+	{
 		//CLEAR
 		tick();
 
-		
 		//SET BACKGROUND TILE COLOR
-		for(int xi = 0; xi < TILE_COUNT_X; xi++){
-			for(int yi = 0; yi < TILE_COUNT_Y; yi++){
+		for(int xi = 0; xi < TILE_COUNT_X; xi++)
+		{
+			for(int yi = 0; yi < TILE_COUNT_Y; yi++)
+			{
 				if(traversable[xi][yi]){
 
 					//Intensity of blue depends on distance of tile from mouse
-					
+
 					//int blue = ((int)(distance[xi][yi]*6) % 512) < 256 ? (int)(distance[xi][yi]*6) % 256 : 255 - ((int)(distance[xi][yi]*6) % 256);
 					int blue = 0;
-					
+
 					// gradient distance
 					g.setColor( new Color( 0, 0, blue ) );
 
@@ -340,24 +356,42 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 			}
 		}
 
-		g.setColor(Color.WHITE);    
-		g.drawString( "particles: " + particleAL.size(), 10, 10 );
 
 
 		//SET GRADIENT
-		int[] gradient = Particle.EXP_GRAD;
-
-
-		// iterate throught densityArray and put into particleRaster
-		for(int xi = 0; xi < WIDTH; xi++){
-			for(int yi = 0; yi < HEIGHT; yi++){
-
-				particleRaster[xi + yi*WIDTH] = gradient[ densityArray[xi][yi] < gradient.length ? densityArray[xi][yi] : gradient.length-1 ];
-
+		//hex colors are alpha, red, green, blue
+		int background_color = 0xff000000;
+		
+		int[] particle_colors = Particle.FIRE_GRAD;
+		
+		ArrayList<Integer> gradient_list = new ArrayList<Integer>();
+		
+		gradient_list.add(background_color);
+		
+		for (int i:particle_colors)
+			gradient_list.add(i);
+				
+				
+		// iterate through densityArray and put into particleRaster
+		for(int xi = 0; xi < WIDTH; xi++)
+		{
+			for(int yi = 0; yi < HEIGHT; yi++)
+			{
+				if (densityArray[xi][yi] < gradient_list.size())
+				{
+					particleRaster[xi + yi*WIDTH] = gradient_list.get(densityArray[xi][yi]);
+				}
+				else
+				{
+					particleRaster[xi + yi*WIDTH] = gradient_list.get(gradient_list.size()-1); //sets center of particle color to last value in gradient array
+				}
 			}
 		}
 
-		g.drawImage(particleImage, -PARTICLE_SIZE/2, -PARTICLE_SIZE/2, WIDTH, HEIGHT, null);
+		g.drawImage(particleImage, 0, 0, WIDTH, HEIGHT, null);
+		
+		g.setColor(Color.WHITE);    
+		g.drawString( "particles: " + particleAL.size(), 10, 10 );
 
 	}
 
@@ -369,7 +403,7 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 	public boolean getPaused(){
 		return paused;
 	}
-	
+
 	public boolean getQuit() {
 		return quit;
 	}
@@ -403,28 +437,28 @@ public class RenderClass_v7 extends JPanel implements MouseListener, MouseMotion
 
 	@Override
 	public void keyTyped(KeyEvent ke) {
-		
+
 		switch (ke.getKeyChar())
 		{
 		case KeyEvent.VK_SPACE:
 			paused = !paused;
 			break;
-			
+
 		case KeyEvent.VK_ESCAPE:
 			quit = !quit;
 			break;
-			
+
 		}
-		
-//		if( ke.getKeyChar() == KeyEvent.VK_ESCAPE ){
-//			paused = !paused;
-//		}
-		
-//		if (ke.getKeyChar() ==  KeyEvent.VK_END){ //Want to make an easy quit key
-//			
-//			System.out.println("End Registered");
-//			quit = !quit;
-//		}
+
+		//		if( ke.getKeyChar() == KeyEvent.VK_ESCAPE ){
+		//			paused = !paused;
+		//		}
+
+		//		if (ke.getKeyChar() ==  KeyEvent.VK_END){ //Want to make an easy quit key
+		//			
+		//			System.out.println("End Registered");
+		//			quit = !quit;
+		//		}
 
 	}
 
